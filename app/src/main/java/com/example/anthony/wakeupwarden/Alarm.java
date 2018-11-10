@@ -2,12 +2,15 @@ package com.example.danie.wakeupwarden;
 
 
 public class Alarm {
-    private long id;
+    private String id;
     private String title;
     private Boolean enable;
-    private String time; //(yyyy-mm-dd hh:mm:ss)
+    //time is set as a string
+    //can be modified for other types
+    private String time;
 
-    public Alarm(long id, String title, String time, Boolean enable) {
+
+    public Alarm(String id, String title, String time, Boolean enable) {
         this.id = id;
         this.time = time;
         this.title = title;
@@ -16,11 +19,11 @@ public class Alarm {
 
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -38,3 +41,4 @@ public class Alarm {
 
 
 }
+
