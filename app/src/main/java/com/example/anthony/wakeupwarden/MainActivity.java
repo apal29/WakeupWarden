@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import java.util.Collections;
 import java.util.Map;
 
 
@@ -35,8 +36,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
 
 
-//Array Alarm used to store the alarms in the database
+    //Array Alarm used to store the alarms in the database
     ArrayList<Alarm> Alarm = new ArrayList<>();
+    //Array String alarmList used for the sorted Array
+    ArrayList<String> alarmList = new ArrayList<>();
 
 
     @Override
@@ -63,21 +66,29 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
         // opens edit alarm dialog
         alarmsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
+            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String timeChosen = alarmList.get(position);
+                Alarm alarmChosen;
+                //searches the AlarmList by alarm
+                for(int i = 0; i < Alarm.size(); i++){
+                    if(Alarm.get(i).getTime() == timeChosen){
+                        alarmChosen = new Alarm (Alarm.get(i).getId(), Alarm.get(i).getTitle(), Alarm.get(i).getTime(), Alarm.get(i).getEnable());
+                        //opens the dialog
+                        EditListItemDialog dialog = new EditListItemDialog();
+                        dialog.show(getSupportFragmentManager(), "EditAlarmDialog");
+                        // sends the id of the alarm to the dialogue in a bundle
+                        Bundle bundle = new Bundle();
+                        //Alarm.get(position).getId())) gets the id of the alarm based on its position in the listView which corresponds to its index in the array
+                        bundle.putString("alarmId", String.valueOf(alarmChosen.getId()));
+                        // set MyFragment Arguments
+                        dialog.setArguments(bundle);
+                        break;
+                    }
+                }
 
 
-               //opens the dialog
-               EditListItemDialog dialog = new EditListItemDialog();
-               dialog.show(getSupportFragmentManager(), "EditAlarmDialog");
-               // sends the id of the alarm to the dialogue in a bundle
-               Bundle bundle = new Bundle();
-               //Alarm.get(position).getId())) gets the id of the alarm based on its position in the listView which corresponds to its index in the array
-               bundle.putString("alarmId", String.valueOf(Alarm.get(position).getId()));
 
-
-               // set MyFragment Arguments
-               dialog.setArguments(bundle);
 
 
 
@@ -119,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         ref.addValueEventListener(listener);
     }
 
-// needed function to retrieve the data from the time set dialog
+    // needed function to retrieve the data from the time set dialog
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         //store values in string
@@ -130,6 +141,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         }
         else
             time =  String.valueOf(hourOfDay) +":" + String.valueOf(minute);
+
+        if(hourOfDay < 10){
+            time =  "0" + time;
+        }
+
 
         DatabaseReference databaseAlarms;
         //sets the wakeupwarden database reference alarm
@@ -145,10 +161,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
     }
 
 
-// loads the list View
+    // loads the list View
     protected void loadListView(Map<String,Object> alarms) {
         // dummy list used to display the alarm list
-        ArrayList<String> alarmList = new ArrayList<>();
+        ArrayList<String> alarmOnly = new ArrayList<>();
         // dummy List to set the global array Alarm to the same order as the alarmList displayed on the user interface
         ArrayList<Alarm> AlarmList = new ArrayList<>();
 
@@ -158,13 +174,17 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
             //Get alarm map
             Map alarmEntry = (Map) entry.getValue();
             //Get alarm time
-            alarmList.add((String) alarmEntry.get("time"));
+            alarmOnly.add((String) alarmEntry.get("time"));
 
             //adds the an alarm to the alarm list
             AlarmList.add(new Alarm((String) alarmEntry.get("id"), (String) alarmEntry.get("title"), (String) alarmEntry.get("time"),(Boolean) alarmEntry.get("enable")));
         }
-        //sets the Alarm array to the correspond in the same order as the alarm list
+        //sets the Alarm array to the correspond in the same order as the alarm list (global array)
         Alarm = AlarmList;
+        //sorts the times
+        Collections.sort(alarmOnly);
+        //sets the String Alarm array to the correspond in the same order as the alarm list (global array)
+        alarmList = alarmOnly;
 
 
 
@@ -176,11 +196,12 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
 
 
-        }
-
-
-
-
-
     }
+
+
+
+
+
+}
+
 
