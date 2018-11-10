@@ -9,7 +9,7 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-
+// time dialogue called by the edit alarm dialogue
 public class EditAlarmDialog extends DialogFragment {
 
     private TimePickerDialog.OnTimeSetListener listener;
@@ -25,7 +25,7 @@ public class EditAlarmDialog extends DialogFragment {
         int min = cal.get(cal.MINUTE);
 
 
-        String time = String.valueOf(hour) + ":" + String.valueOf(min);
+       // String time = String.valueOf(hour) + ":" + String.valueOf(min);
 
 
         //the current time will be shown on the fragment
