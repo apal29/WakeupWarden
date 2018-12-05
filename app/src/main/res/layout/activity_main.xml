@@ -2,30 +2,72 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/InsertAlarmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="177dp"
         android:layout_marginBottom="27dp"
-        android:layout_marginEnd="29dp"
         android:clickable="true"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <ListView
-        android:id="@+id/AlarmListView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/activity_main_swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="465dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="46dp">
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp">
+
+        <ListView
+            android:id="@+id/AlarmListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="51dp"
+            android:layout_marginBottom="51dp"
+            android:background="@color/colorPrimaryOther"
+            android:clipToPadding="false"
+            android:descendantFocusability="blocksDescendants"
+            android:divider="@android:color/black"
+            android:dividerHeight="1.0sp"
+            android:paddingBottom="90dp">
 
 
-    </ListView>
+        </ListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/wifiStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorAccent"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:text="NO ALARMS!!! "
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical|center_horizontal"/>
+
+
 
 </RelativeLayout>

@@ -1,15 +1,14 @@
-package com.example.danie.wakeupwarden;
+package com.example.anthony.wakeupwarden;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
-import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-
+// time dialogue called by the edit alarm dialogue
 public class EditAlarmDialog extends DialogFragment {
 
     private TimePickerDialog.OnTimeSetListener listener;
@@ -25,13 +24,14 @@ public class EditAlarmDialog extends DialogFragment {
         int min = cal.get(cal.MINUTE);
 
 
-        String time = String.valueOf(hour) + ":" + String.valueOf(min);
+       // String time = String.valueOf(hour) + ":" + String.valueOf(min);
 
 
         //the current time will be shown on the fragment
         return new TimePickerDialog(getContext(), this.listener, hour, min, DateFormat.is24HourFormat(getContext()));
 
     }
+
         public void setListener( final TimePickerDialog.OnTimeSetListener listener) {
             this.listener = listener;
         }

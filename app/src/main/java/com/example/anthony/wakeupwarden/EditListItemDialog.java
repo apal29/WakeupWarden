@@ -1,4 +1,4 @@
-package com.example.danie.wakeupwarden;
+package com.example.anthony.wakeupwarden;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -9,50 +9,50 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.danie.wakeupwarden.Database.DatabaseHelper;
-
-import java.util.Calendar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class EditListItemDialog extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
 
 
-
+    //initialize the global variables
     private static final String TAG = "EditAlarmDialog";
     EditText editText;
     Button cancelButton;
     Button saveButton;
     Button deleteButton;
-    Button timeButton;
-    Switch enableSwitch;
+    TextView timeButton;
     boolean enable;
     String time;
     String title;
-    long Id;
+    String Id;
+    Alarm alarm;
+
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflator, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
+        //set view of fragment class
         View view = inflator.inflate(R.layout.edit_delete_mode, container, false);
-      //  super.onCreate(savedInstanceState);
-    //    setContentView(R.layout.edit_delete_mode);//here is your xml with EditText and 'Ok' and 'Cancel' buttons
+        //initialize the global variables
         editText = view.findViewById(R.id.alarmTitleEditText);
         cancelButton = view.findViewById(R.id.cancelButton);
         saveButton = view.findViewById(R.id.saveButton);
         deleteButton = view.findViewById(R.id.deleteButton);
-        enableSwitch = view.findViewById(R.id.enableButton);
-        timeButton = view.findViewById(R.id.timeButton);
+        timeButton = view.findViewById(R.id.alarmView);
 
-        DatabaseHelper dbhelper = new DatabaseHelper(getActivity());
-        String dummyId = getArguments().getString("alarmId");
-        Id = new Long(dummyId);
 
+
+        //dismisses the dialog
         cancelButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,16 +61,47 @@ public class EditListItemDialog extends DialogFragment implements TimePickerDial
             }
         });
 
+        // retrieves information sent by the chosen List Item (id of the alarm)
+        //Id retrieved by the bundle
+        Id = getArguments().getString("alarmId");
+
+        //referencing the child "alarm" from the wakeupwarden cloud database
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("alarms");
+        //Id contains the key passed through the bundle
+        //the keys are filtered with the Id that contains a key
+        //NOTE Id is equal to the key
+        //NOTE listener below is performed knowing that there will be 1 key match
+        ref.child(Id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //retrieve data from the map of the item
+                String time = dataSnapshot.child("time").getValue(String.class);
+                String title = dataSnapshot.child("title").getValue(String.class);
+                Boolean alarmEnable = dataSnapshot.child("enable").getValue(Boolean.class);
+                enable = alarmEnable;
+                //define new alarm
+                alarm = new Alarm(Id, title, time, alarmEnable);
+
+                timeButton.setText(alarm.getTime());
+                editText.setText(alarm.getTitle());
+
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //handle databaseError
+                getDialog().dismiss();
+
+            }
+        });
 
 
 
 
+        // sets all the parameters displays them on the dialog using the Id of the alarm
 
-        timeButton.setText(dbhelper.getAlarmById(Id).getTime());
-        editText.setText(dbhelper.getAlarmById(Id).getTitle());
-        enable = dbhelper.getAlarmById(Id).getEnable();
-        enableSwitch.setChecked(enable);
-
+        //opens a set time dialog
+        // Listener is added so that the time set will return to the dialog and not the mainActivity
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,73 +113,43 @@ public class EditListItemDialog extends DialogFragment implements TimePickerDial
 
         });
 
-        enableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton cb, boolean on){
-                if(on)
-                {
-                    enable = true;
-                }
-                else
-                {
-                    enable = false;
-                }
-            }
-        });
-
+        //saves all changes made in the dialogue
+        //dismisses the dialogue once changes are saved to the database
         saveButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String time = String.valueOf(timeButton.getText());
+
+
                 title = editText.getText().toString();
 
 
-
-                DatabaseHelper dbhelper = new DatabaseHelper(getActivity());
-                String time = String.valueOf(timeButton.getText());
                 Alarm alarm = new Alarm(Id, title, time , enable);
-                dbhelper.updateAlarmInfo(alarm);
-                ((MainActivity) getActivity()).loadListView();
+
+                //save the changes to the alarm cloud database
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("alarms");
+                ref.child(Id).setValue(alarm);
+
                 getDialog().dismiss();
-
-
             }
         });
-
+        // Deletes the alarm
         deleteButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseHelper dbhelper = new DatabaseHelper(getActivity());
-                dbhelper.deleteAlarmByID(Long.toString(Id));
-                ((MainActivity) getActivity()).loadListView();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("alarms");
+                ref.child(Id).setValue(null);
                 getDialog().dismiss();
             }
         });
 
 
-
-/*    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_delete_mode);//here is your xml with EditText and 'Ok' and 'Cancel' buttons
-        editText = findViewById(R.id.AlarmTitleEditText);
-        cancelButton = findViewById(R.id.cancelButton);
-        saveButton = findViewById(R.id.saveButton);
-        deleteButton = findViewById(R.id.deleteButton);
-        enableSwitch = findViewById(R.id.enableButton);
-    }*/
-
-/*       @Override
-        public void onClick (View v){
-            editText.getText().toString();//here is your updated(or not updated) text
-            dismiss();
-        }*/
-
-
-    return view;
+        return view;
     }
-
+    // needed to retrieve the time set on the time dialogue
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
 
         //store values in string
         //TextView text = (TextView)findViewById(R.id.text);
@@ -158,13 +159,7 @@ public class EditListItemDialog extends DialogFragment implements TimePickerDial
         else
             time =  String.valueOf(hourOfDay) +":" + String.valueOf(minute);
         timeButton.setText(time);
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND, 0);
-        //updateTime(c);
-        // startAlarm(c);
+
     }
+
 }
-
-

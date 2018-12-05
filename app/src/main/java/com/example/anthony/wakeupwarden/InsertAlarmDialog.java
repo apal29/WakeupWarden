@@ -1,4 +1,4 @@
-package com.example.danie.wakeupwarden;
+package com.example.anthony.wakeupwarden;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -7,9 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 
-import com.example.danie.wakeupwarden.Database.DatabaseHelper;
-
-
 import java.util.Calendar;
 
 public class InsertAlarmDialog extends DialogFragment {
@@ -17,7 +14,7 @@ public class InsertAlarmDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        //set clock to show the current hour minute always
+        //set clock to show the current hour minute
         Calendar cal =  Calendar.getInstance();
 
         int hour = cal.get(cal.HOUR_OF_DAY);

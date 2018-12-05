@@ -1,13 +1,14 @@
-package com.example.danie.wakeupwarden;
-
+package com.example.anthony.wakeupwarden;
 
 public class Alarm {
-    private long id;
+    private String id;
     private String title;
     private Boolean enable;
-    private String time; //(yyyy-mm-dd hh:mm:ss)
+    //Note: time is set as a string
+    private String time;
 
-    public Alarm(long id, String title, String time, Boolean enable) {
+    //set constructor
+    public Alarm(String id, String title, String time, Boolean enable) {
         this.id = id;
         this.time = time;
         this.title = title;
@@ -15,12 +16,12 @@ public class Alarm {
 
 
     }
-
-    public long getId() {
+    // set get and set Alarm functions
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -38,3 +39,5 @@ public class Alarm {
 
 
 }
+
+
