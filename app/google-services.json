@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "517818684024",
+    "firebase_url": "https://wakeupwarden-866f4.firebaseio.com",
+    "project_id": "wakeupwarden-866f4",
+    "storage_bucket": "wakeupwarden-866f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517818684024:android:c9030675c8d1f8ee",
+        "android_client_info": {
+          "package_name": "com.example.anthony.wakeupwarden"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517818684024-9fkmscojnoiko441j2scvea68elk5a0k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anthony.wakeupwarden",
+            "certificate_hash": "d87200d1ea9123d532bb5b621de8a998da35879c"
+          }
+        },
+        {
+          "client_id": "517818684024-3aan33ief9cq3n27u3l9eip7lnm4a83d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSr7f2N3rsbenmLf5uryGglmfCq8m1FBE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517818684024-3aan33ief9cq3n27u3l9eip7lnm4a83d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
