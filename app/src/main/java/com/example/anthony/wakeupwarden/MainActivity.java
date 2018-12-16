@@ -137,9 +137,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
             loadListViewNoWifi();
         }
 
-
-
-
         // opens alarm dialog to set the alarm
         insertAlarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,9 +144,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
                 Log.d(TAG, "floating button onclick");
                 InsertAlarmDialog dialog = new InsertAlarmDialog();
                 dialog.show(getSupportFragmentManager(), "Insert alarm");
-
             }
-
         });
 
 
@@ -190,24 +185,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
                     toast.show();
                 }
             }
-
-
-
-
-
-
-
-
         });
-
-
-
-
-
-
-
-
-
     }
     //empty so the user cannot go back to the HomeActivity  (Load Page)
     @Override
@@ -243,11 +221,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
             //saves the alarm to the database with the key generated above
             //NOTE: ID OF THE ALARM IS THE KEY GENERATED
             databaseAlarms.child(key).setValue(new Alarm(key, "", time, true));
-
-
         }
-
-
         else{
             DatabaseReference databaseAlarms;
             //sets the wakeupwarden database reference alarm
@@ -360,10 +334,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         }
         else
             recreate();
-
-
-
-
     }
     protected void loadListViewNoWifi() {
         // dummy List to set the global array Alarm to the same order as the alarmList displayed on the user interface
@@ -404,9 +374,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
                     }
                 }
-
-
-
             }
 
             if (timeView == false) {
@@ -504,8 +471,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         }
         else
             return true;
-
-
 
     }
 
